@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoRevolución | Registro de residuos</title>
+
+  <style>
+    :root {
+      --verde: #146b4a;
+      --claro: #eaf7ef;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f9f6;
+      color: #24362c;
+    }
+
+    header {
+      background: linear-gradient(120deg, #146b4a, #289968);
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    header h1 { font-size: 38px; margin: 0 0 10px; }
+
+    main {
+      max-width: 950px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    section {
+      background: white;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px #00000010;
+    }
+
+    h2 { color: var(--verde); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #abc8b6;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .campo { margin-bottom: 15px; }
+
+    button {
+      background: var(--verde);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #0e5037; }
+
+    .estadisticas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .dato {
+      background: var(--claro);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .dato strong {
+      display: block;
+      color: var(--verde);
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+
+    .tabla-contenedor { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 550px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th { background: var(--claro); }
+
+    .aviso {
+      background: #fff8df;
+      padding: 15px;
+      border-left: 4px solid #d5a32c;
+      border-radius: 6px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #547062;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🌱 EcoRevolución</h1>
+    <p>Sistema comunitario de registro y reducción de residuos</p>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>¿Qué es EcoRevolución?</h2>
+      <p>
+        Es un proyecto para reducir el consumo de plástico,
+        promover el reciclaje y registrar los residuos
+        recolectados en nuestra colonia.
+      </p>
+      <p>
+        Nuestra meta es reducir un 15% el consumo de plástico
+        desechable entre las familias participantes en tres meses.
+      </p>
+    </section>
+
+    <section>
+      <h2>♻️ Registrar un depósito</h2>
+
+      <p>Usa un nombre o alias. No es necesario escribir tu dirección completa.</p>
+
+      <form id="formulario">
+
+        <div class="grid">
+
+          <div class="campo">
+            <label for="nombre">Nombre o alias</label>
+            <input type="text" id="nombre" required maxlength="50">
+          </div>
+
+          <div class="campo">
+            <label for="sector">Sector de la colonia</label>
+            <input type="text" id="sector" maxlength="50">
+          </div>
+
+          <div class="campo">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" required>
+          </div>
+
+          <div class="campo">
+            <label for="material">Tipo de residuo</label>
+            <select id="material" required>
+              <option value="">Selecciona un material</option>
+              <option>Botellas PET</option>
+              <option>Envases de plástico</option>
+              <option>Bolsas y envolturas</option>
+              <option>Papel y cartón</option>
+              <option>Metales</option>
+              <option>Vidrio</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="peso">Cantidad en kilogramos</label>
+            <input
+              type="number"
+              id="peso"
+              min="0.01"
+              max="10000"
+              step="0.01"
+              required
+              placeholder="Ejemplo: 1.5"
+            >
+          </div>
+
+          <div class="campo">
+            <label for="medicion">Método de medición</label>
+            <select id="medicion" required>
+              <option value="">Selecciona</option>
+              <option>Báscula</option>
+              <option>Estimación</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="campo">
+          <label for="notas">Observaciones</label>
+          <textarea id="notas" maxlength="250"></textarea>
+        </div>
+
+        <button type="submit">Guardar registro</button>
+        <p id="mensaje" role="status"></p>
+
+      </form>
+    </section>
+
+    <section>
+      <h2>📊 Resultados de EcoRevolución</h2>
+
+      <div class="estadisticas">
+        <div class="dato">
+          <strong id="totalKg">0.00</strong>
+          Kilogramos registrados
+        </div>
+
+        <div class="dato">
+          <strong id="totalDepositos">0</strong>
+          Depósitos registrados
+        </div>
+
+        <div class="dato">
+          <strong id="totalPersonas">0</strong>
+          Participantes distintos
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>📋 Historial de depósitos</h2>
+
+      <div class="campo">
+        <label for="filtro">Filtrar por material</label>
+        <select id="filtro">
+          <option value="">Todos</option>
+          <option>Botellas PET</option>
+          <option>Envases de plástico</option>
+          <option>Bolsas y envolturas</option>
+          <option>Papel y cartón</option>
+          <option>Metales</option>
+          <option>Vidrio</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Participante</th>
+              <th>Material</th>
+              <th>Kg</th>
+              <th>Medición</th>
+            </tr>
+          </thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
+
+      <p id="sinDatos">Todavía no hay depósitos registrados.</p>
+
+      <button type="button" id="descargar">
+        Descargar registros CSV
+      </button>
+    </section>
+
+    <section>
+      <h2>Información importante</h2>
+      <p class="aviso">
+        Esta es una versión de demostración.
+        Los datos se guardan únicamente en el navegador de
+        este dispositivo. No se comparten automáticamente
+        con otros vecinos.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    EcoRevolución 🌎 | Cuidemos juntos nuestro planeta
+  </footer>
+
+  <script>
+    const CLAVE = "ecorevolucion_registros_v1";
+
+    const elemento = id => document.getElementById(id);
+
+    let registros = [];
+
+    try {
+      const guardados = JSON.parse(
+        localStorage.getItem(CLAVE) || "[]"
+      );
+
+      if (Array.isArray(guardados)) {
+        registros = guardados;
+      }
+    } catch (error) {
+      registros = [];
+    }
+
+    const ahora = new Date();
+
+    const fechaActual = new Date(
+      ahora.getTime() - ahora.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    elemento("fecha").value = fechaActual;
+    elemento("fecha").max = fechaActual;
+
+    function actualizarPantalla() {
+      const totalKg = registros.reduce(
+        (suma, registro) => suma + Number(registro.peso || 0),
+        0
+      );
+
+      elemento("totalKg").textContent = totalKg.toFixed(2);
+      elemento("totalDepositos").textContent = registros.length;
+
+      const personas = new Set(
+        registros.map(r => r.nombre.trim().toLowerCase())
+      );
+
+      elemento("totalPersonas").textContent = personas.size;
+
+      const materialElegido = elemento("filtro").value;
+
+      const filtrados = registros
+        .filter(r => !materialElegido || r.material === materialElegido)
+        .slice()
+        .reverse();
+
+      const tabla = elemento("tabla");
+      tabla.replaceChildren();
+
+      filtrados.forEach(registro => {
+        const fila = document.createElement("tr");
+
+        const valores = [
+          registro.fecha,
+          registro.nombre,
+          registro.material,
+          Number(registro.peso).toFixed(2),
+          registro.medicion
+        ];
+
+        valores.forEach(valor => {
+          const celda = document.createElement("td");
+          celda.textContent = valor;
+          fila.appendChild(celda);
+        });
+
+        tabla.appendChild(fila);
+      });
+
+      elemento("sinDatos").hidden = filtrados.length > 0;
+    }
+
+    elemento("formulario").addEventListener("submit", function(evento) {
+      evento.preventDefault();
+
+      const peso = Number(elemento("peso").value);
+      const fecha = elemento("fecha").value;
+
+      if (!Number.isFinite(peso) || peso <= 0 || fecha > fechaActual) {
+        elemento("mensaje").textContent =
+          "Revisa la fecha y la cantidad.";
+        return;
+      }
+
+      const registro = {
+        nombre: elemento("nombre").value.trim(),
+        sector: elemento("sector").value.trim(),
+        fecha: fecha,
+        material: elemento("material").value,
+        peso: peso,
+        medicion: elemento("medicion").value,
+        notas: elemento("notas").value.trim()
+      };
+
+      if (!registro.nombre || !registro.material || !registro.medicion) {
+        return;
+      }
+
+      try {
+        const nuevosRegistros = [...registros, registro];
+
+        localStorage.setItem(
+          CLAVE,
+          JSON.stringify(nuevosRegistros)
+        );
+
+        registros = nuevosRegistros;
+
+        elemento("formulario").reset();
+        elemento("fecha").value = fechaActual;
+
+        elemento("mensaje").textContent =
+          "¡Depósito guardado correctamente!";
+
+        actualizarPantalla();
+      } catch (error) {
+        elemento("mensaje").textContent =
+          "No se pudo guardar el registro.";
+      }
+    });
+
+    elemento("filtro").addEventListener(
+      "change",
+      actualizarPantalla
+    );
+
+    elemento("descargar").addEventListener("click", function() {
+      const columnas = [
+        "fecha",
+        "nombre",
+        "sector",
+        "material",
+        "peso",
+        "medicion",
+        "notas"
+      ];
+
+      function formatoCSV(valor) {
+        return '"' + String(valor ?? "")
+          .replaceAll('"', '""') + '"';
+      }
+
+      const filas = registros.map(registro =>
+        columnas.map(columna =>
+          formatoCSV(registro[columna])
+        ).join(",")
+      );
+
+      const contenido = "\uFEFF" +
+        [columnas.join(","), ...filas].join("\r\n");
+
+      const archivo = new Blob(
+        [contenido],
+        { type: "text/csv;charset=utf-8" }
+      );
+
+      const url = URL.createObjectURL(archivo);
+
+      const enlace = document.createElement("a");
+      enlace.href = url;
+      enlace.download = "EcoRevolucion_registros.csv";
+      enlace.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    actualizarPantalla();
+  </script>
+
+</body>
+</html>
